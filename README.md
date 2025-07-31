@@ -158,3 +158,102 @@ https://github.com/runelite/runelite
 
 RuneLite is licensed under the BSD 2-clause license. See the license header in the respective file to be sure.
 
+# Iron Ore Bank Withdrawal Script
+
+This script automatically withdraws 5 iron ores from the bank, but only if specific conditions are met.
+
+## Requirements
+
+The script will only execute if **ALL** of the following conditions are satisfied:
+
+1. **Mithril Pickaxe Equipped**: A mithril pickaxe must be equipped in the weapon slot
+2. **Mining Level > 20**: The player's mining level must be greater than 20
+3. **Not Poisoned**: The player must not be affected by poison or venom
+
+## Files Created
+
+### Full Plugin Implementation
+- `BankWithdrawScript.java` - Main script with continuous monitoring
+- `BankWithdrawPlugin.java` - Plugin wrapper for RuneLite integration
+- `BankWithdrawConfig.java` - Configuration interface
+- `BankWithdrawOverlay.java` - Visual overlay showing status
+
+### Standalone Script
+- `iron_ore_withdrawal_script.java` - Simple one-time execution script
+
+## How to Use
+
+### Option 1: Standalone Script (Recommended for single use)
+1. Copy the `iron_ore_withdrawal_script.java` file
+2. Ensure you meet all requirements:
+   - Equip a mithril pickaxe in your weapon slot
+   - Have mining level greater than 20
+   - Cure any poison/venom effects
+   - Have iron ore in your bank
+3. Be near a bank or have the bank interface open
+4. Execute the script by calling `IronOreWithdrawalScript.main()`
+
+### Option 2: Full Plugin (For continuous monitoring)
+1. Place all the plugin files in the microbot directory
+2. Enable the "Bank Withdraw" plugin in RuneLite
+3. The script will continuously monitor and withdraw iron ore when conditions are met
+
+## Script Behavior
+
+✅ **Success Case**: When all conditions are met:
+- Opens bank automatically if not already open
+- Withdraws exactly 5 iron ores
+- Provides success confirmation
+
+❌ **Failure Cases**: The script will abort and explain why:
+- "Mithril pickaxe is not equipped in weapon slot"
+- "Mining level (X) must be greater than 20"
+- "Player is poisoned (poison value: X)"
+- "No iron ore found in bank"
+
+⚠️ **Edge Case**: If fewer than 5 iron ores are available, it withdraws all remaining iron ore.
+
+## Technical Details
+
+### APIs Used
+- `Rs2Equipment.isWearing()` - Check equipped items
+- `Microbot.getClient().getRealSkillLevel(Skill.MINING)` - Get mining level
+- `Microbot.getClient().getVarpValue(VarPlayerID.POISON)` - Check poison status
+- `Rs2Bank.withdrawX()` - Withdraw specific quantity
+
+### Poison Status Detection
+The script uses `VarPlayerID.POISON` where:
+- Positive values = poisoned/venomed
+- Zero or negative values = not poisoned or immune
+
+### Equipment Detection
+Uses `ItemID.MITHRIL_PICKAXE` (ID: 1273) to verify the correct pickaxe type is equipped.
+
+## Safety Features
+
+- Comprehensive requirement checking before any action
+- Detailed logging for troubleshooting
+- Graceful handling of edge cases (insufficient items, bank access issues)
+- No actions performed if any requirement is not met
+
+## Example Output
+
+```
+✅ Mithril pickaxe is equipped
+✅ Mining level (35) is sufficient  
+✅ Player is not poisoned
+Opening bank...
+Iron ore in bank: 127
+Withdrawing 5 iron ores...
+✅ Successfully withdrew 5 iron ores
+```
+
+## Error Handling
+
+The script includes robust error handling for common scenarios:
+- Player not logged in
+- Bank access issues
+- Insufficient items
+- Equipment not properly equipped
+- Status effects preventing safe operation
+

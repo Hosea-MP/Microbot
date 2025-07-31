@@ -42,7 +42,6 @@ public class BankWithdrawOverlay extends OverlayPanel {
                     .color(Color.GREEN)
                     .build());
             
-            // Check mithril pickaxe status
             boolean hasMithrilPickaxe = Rs2Equipment.isWearing(ItemID.MITHRIL_PICKAXE, EquipmentInventorySlot.WEAPON);
             panelComponent.getChildren().add(LineComponent.builder()
                     .left("Mithril Pickaxe:")
@@ -50,7 +49,6 @@ public class BankWithdrawOverlay extends OverlayPanel {
                     .rightColor(hasMithrilPickaxe ? Color.GREEN : Color.RED)
                     .build());
             
-            // Check mining level
             int miningLevel = Microbot.getClient().getRealSkillLevel(Skill.MINING);
             boolean validMiningLevel = miningLevel > 20;
             panelComponent.getChildren().add(LineComponent.builder()
@@ -59,7 +57,6 @@ public class BankWithdrawOverlay extends OverlayPanel {
                     .rightColor(validMiningLevel ? Color.GREEN : Color.RED)
                     .build());
             
-            // Check poison status
             int poisonStatus = Microbot.getClient().getVarpValue(VarPlayerID.POISON);
             boolean isPoisoned = poisonStatus > 0;
             panelComponent.getChildren().add(LineComponent.builder()
@@ -68,7 +65,6 @@ public class BankWithdrawOverlay extends OverlayPanel {
                     .rightColor(isPoisoned ? Color.RED : Color.GREEN)
                     .build());
             
-            // Overall status
             boolean allRequirementsMet = hasMithrilPickaxe && validMiningLevel && !isPoisoned;
             panelComponent.getChildren().add(LineComponent.builder()
                     .left("Status:")
@@ -82,7 +78,6 @@ public class BankWithdrawOverlay extends OverlayPanel {
                     .build());
             
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
         }
         return super.render(graphics);
     }
